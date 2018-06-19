@@ -1,1 +1,220 @@
-.bash_profile
+############### stuff about display ###############
+
+# make ls display in color
+export CLICOLOR=1
+export LSCOLORS=GxFxCxDxBxegedabagaced
+
+
+function get_git_branch() {
+    #git branch outputs on stderr (stream #2) so redirect that to /dev/null to
+    #supress the output:
+    #git branch 2> /dev/null
+
+    #now pipe that suppressed output to sed, which processes the text:
+    # <...> | sed
+
+    #in sed, -e lets us write multiple commands
+
+    #'/<regex>/d' deletes all lines which are picked up by the regex
+    #in our case, we want to delete lines which start
+    # ^
+    #with any character that's not *
+    # [^*]
+    #because branches we're not on don't start with a *
+
+    #next we want to grab the branch name from the line containing it, which
+    #really just means stripping the * and space off the front
+    #s=substitute
+    #format is s/old-text-regex/new-text-regex
+    #so, find a *, followed by a space, and then group .*, which is any number
+    #of random characters
+    #replace that with an open bracket, the contents of that group (the branch
+    #name) and a close bracket
+
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/[\1] /'
+}
+
+#name=(thing thing thing) is how you create an array
+emoji=(🐶 🐥 🦄 🦋 🐚 🐷 🦊 🐼 🐭 🦎 🦑 🐠 🐬 🦈 🐟 🐳 🐨 🐰 🐺 🐿 🍁 🌎 🌈 🍉 🥑 🌶 🍣 🚀 🌀 🧀 ⭐️ 🌵)
+#you can declare a variable with no value by doing name=
+#declare this as a global variable since functions in bash can't return
+#anything other than the return value of the last statement
+prompt_emoji=
+
+
+function pick_random_emoji() {
+    #get the length of the emoji array
+    #using @ as the index means 'get the whole array'
+    #the # means 'tell me the length'
+    #${stuff} is the same as $stuff (give me the value of stuff) except that
+    #${stuff} is more flexible (can be used where $stuff would be ambiguous)
+    local length=${#emoji[@]}
+
+    #get a random number between 0 and length
+    #$RANDOM gives a number between 0 and 32767
+    #$(( math-expression )) gives the value of the mathematical expression
+    local rand_index=$(($RANDOM % $length))
+
+    #get the emoji at <index> out of the array
+    prompt_emoji=${emoji[$rand_index]}
+}
+
+
+function set_prompt() {
+    #get the current branch, if any
+    #$(command) runs the command and gives back the result
+    local branch=$(get_git_branch)
+
+    #if we're in an env, add the name of the env to the prompt
+    #[[ boolean expression ]] gives the truth value of the expression
+    #fi closes the if block (since it's 'if' spelled backwards)
+    #basename takes a full path and spit out just the final bit
+    #(everything after the last /)
+    if [[ $VIRTUAL_ENV != "" ]]
+    then
+        local env="($(basename $VIRTUAL_ENV)) "
+    else
+        local env=""
+    fi
+
+    #pick a random emoji for the prompt
+    #(this sets the value of the global variable prompt_emoji)
+    pick_random_emoji
+
+    #set the prompt
+    #colors listed here:
+    #http://misc.flogisoft.com/bash/tip_colors_and_formatting#colors1
+    #in order to get multiple lines not to run on top of each other, add \[
+    #and \] around the color codes
+    export PS1="\n\[\e[38;5;29m\]${env}\[\e[38;5;69m\]${branch}\[\e[38;5;256m\]${prompt_emoji}  \W > "
+
+    #alternative two-line version
+    # export PS1="\n\e[38;5;69m${branch}\n\e[38;5;29m${env}\e[38;5;256m${prompt_emoji}  \W > "
+
+}
+
+
+#PROMPT_COMMAND is an environment variable which specifies a command to be run
+#before each prompt is displayed
+export PROMPT_COMMAND=set_prompt
+
+
+############### stuff about the path ###############
+
+# add postgres to the $PATH
+export PATH=/Applications/Postgres.app/Contents/Versions/9.4/bin/:$PATH
+
+# MacPorts Installer addition on 2016-10-17_at_16:38:03: adding an appropriate PATH variable for use with MacPorts.
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+
+
+
+############### aliases and other shortcuts ###############
+
+# activate a virtualenv
+# alias ae='source env/bin/activate'
+
+# git stuff
+alias gs='git status'
+
+# cd to particular locations
+alias sentry1='cd /Users/Katie/Documents/Sentry'
+alias brain='cd /Users/Katie/Documents/Sentry/brain'
+alias sentry2='cd /Users/Katie/Documents/Sentry/sentry'
+alias gsentry='cd /Users/Katie/Documents/Sentry/getsentry'
+alias testapps='cd /Users/Katie/Documents/Sentry/test-apps'
+
+
+
+
+
+
+
+
+## BELOW FROM HB ##
+
+# # activate a virtualenv
+# alias ae='source env/bin/activate'
+
+# # git stuff
+# alias gs='git status'
+
+# # cd to particular locations
+# alias testvag='cd ~/Documents/Hackbright/StaffStuff/vagrant'
+# alias hbvag='cd ~/../Katie/Documents/Hackbright/StaffStuff/vagrant-hb'
+# alias zulip='cd ~/zulip'
+# alias zulipae='source /srv/zulip-py3-venv/bin/activate'
+# alias coding='cd ~/Documents/coding'
+
+# #cd to locations which have envs and which are git repos
+# function hb {
+#     #to do function(args) write function arg1 arg2 etc
+#     cd_and_activate_env Documents/Hackbright
+# }
+
+# function fellowship {
+#     cd_and_activate_env Documents/Hackbright/StaffStuff/fellowship
+# }
+
+# function frodo {
+#     cd_and_activate_env Documents/Hackbright/StaffStuff/frodo
+# }
+
+# function sp {
+#     cd_and_activate_env Documents/Hackbright/StaffStuff/surveyporcupine
+# }
+
+# function cd_and_activate_env {
+#     #if we're currently in an env, that means the copy of python we're using
+#     #will be in that env, and therefore "env" will be in its path
+#     if [[ $(which python) == *"env"* ]]
+#     then
+#         echo "deactivating previous virtualenv"
+#         deactivate
+#     fi
+
+#     #$1 is the first argument to the function
+#     dir_path=$1
+
+#     #go to the directory and activate its virtual env
+#     cd ~/$dir_path
+#     echo "activating ${dir_path} virtualenv"
+#     source env/bin/activate
+
+#     #if this is a git repo, there will be a .git directory; do git status
+#     if [[ $(ls -a) == *".git"* ]]
+#     then
+#         # echo "found a .git directory"
+#         git status
+#     fi
+# }
+
+
+############### random other stuff ###############
+
+
+# add the public keys for makeuploading
+# ssh-add ~/.ssh/fellowship_hackbrightacademy_com_rsa
+# ssh-add ~/.ssh/byers-fellowship
+
+
+# # enable git completion, if the script is there
+# #the -f means "if this file exists and is a regular file"
+# if [[ -f ~/.git-completion.bash ]]
+# then
+#   echo "sourcing git completion script"
+#   source ~/.git-completion.bash
+# fi
+
+
+# make the history remember lots of stuff
+export HISTSIZE=10000
+
+# make virtualenvwrapper work
+source /usr/local/bin/virtualenvwrapper.sh
+
+# make
+
+# make nvm work
+export NVM_DIR="/Users/Katie/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
