@@ -1,1 +1,9 @@
-../.gitconfig
+[user]
+	name = Katie Byers
+	email = lobsterkatie@gmail.com
+[credential]
+	helper = osxkeychain
+[core]
+	editor = 'subl' --wait
+[push]
+	default = current
