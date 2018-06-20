@@ -1,0 +1,180 @@
+{
+    // Controls if the editor should automatically format the pasted content. A formatter must be available and the formatter should be able to format a range in a document.
+    "editor.formatOnPaste": true,
+
+    // Format a file on save. A formatter must be available, the file must not be auto-saved, and editor must not be shutting down.
+    "editor.formatOnSave": true,
+
+    // The modifier to be used to add multiple cursors with the mouse. `ctrlCmd` maps to `Control` on Windows and Linux and to `Command` on macOS. The Go To Definition and Open Link mouse gestures will adapt such that they do not conflict with the multicursor modifier.
+    "editor.multiCursorModifier": "ctrlCmd",
+
+    // Controls how the editor should render the current line highlight, possibilities are 'none', 'gutter', 'line', and 'all'.
+    "editor.renderLineHighlight": "gutter",
+
+    // Render vertical rulers after a certain number of monospace characters. Use multiple values for multiple rulers. No rulers are drawn if array is empty
+    "editor.rulers": [80],
+
+    // Controls whether snippets are shown with other suggestions and how they are sorted.
+    "editor.snippetSuggestions": "top",
+
+    // The number of spaces a tab is equal to. This setting is overridden based on the file contents when `editor.detectIndentation` is on.
+    "editor.tabSize": 4,
+
+    // Controls whether unsaved files are remembered between sessions, allowing the save prompt when exiting the editor to be skipped.
+    "files.hotExit": "off",
+
+    // When enabled, insert a final new line at the end of the file when saving it.
+    "files.insertFinalNewline": true,
+
+    // When enabled, will trim all new lines after the final new line at the end of the file when saving it.
+    "files.trimFinalNewlines": true,
+
+    // When enabled, will trim trailing whitespace when saving a file.
+    "files.trimTrailingWhitespace": true,
+
+    // Whether to confirm on exit if there are active terminal sessions.
+    "terminal.integrated.confirmOnExit": true,
+
+    // Controls the style of terminal cursor.
+    "terminal.integrated.cursorStyle": "line",
+
+    // Controls if closing the last editor should also close the window. This setting only applies for windows that do not show folders.
+    "window.closeWhenEmpty": true,
+
+    // Controls the dimensions of opening a new window when at least one window is already opened. By default, a new window will open in the center of the screen with small dimensions. When set to 'inherit', the window will get the same dimensions as the last window that was active. When set to 'maximized', the window will open maximized and fullscreen if configured to 'fullscreen'. Note that this setting does not have an impact on the first window that is opened. The first window will always restore the size and location as you left it before closing.
+    "window.newWindowDimensions": "maximized",
+
+    // Controls if files should open in a new window.
+    // - default: files will open in the window with the files' folder open or the last active window unless opened via the dock or from finder (macOS only)
+    // - on: files will open in a new window
+    // - off: files will open in the window with the files' folder open or the last active window
+    // Note that there can still be cases where this setting is ignored (e.g. when using the -new-window or -reuse-window command line option).
+    "window.openFilesInNewWindow": "default",
+
+    // Controls how windows are being reopened after a restart. Select 'none' to always start with an empty workspace, 'one' to reopen the last window you worked on, 'folders' to reopen all windows that had folders opened or 'all' to reopen all windows of your last session.
+    "window.restoreWindows": "all",
+
+    // Adjust the zoom level of the window. The original size is 0 and each increment above (e.g. 1) or below (e.g. -1) represents zooming 20% larger or smaller. You can also enter decimals to adjust the zoom level with a finer granularity.
+    "window.zoomLevel": 0,
+
+    // Specifies the color theme used in the workbench.
+    "workbench.colorTheme": "Atom One Dark",
+
+    // Controls the sizing of editor tabs. Set to 'fit' to keep tabs always large enough to show the full editor label. Set to 'shrink' to allow tabs to get smaller when the available space is not enough to show all tabs at once.
+    "workbench.editor.tabSizing": "shrink",
+
+    // Controls the visibility of the Twitter feedback (smiley) in the status bar at the bottom of the workbench.
+    "workbench.statusBar.feedback.visible": false,
+
+
+
+    /************ LANGUAGE-SPECIFIC STUFF ************/
+
+    // Do not use duplicate style definitions
+    "css.lint.duplicateProperties": "warning",
+
+    // No unit for zero needed
+    "css.lint.zeroUnits": "warning",
+
+    // Enable/disable highlighting of unused variables in code. Requires TypeScript >= 2.9
+    // IF THIS IS ENABLED, SYNTAX HIGHLIGHTING BREAKS FOR THAT LINE
+    "javascript.showUnused": false,
+    "typescript.showUnused": false,
+
+    "[javascript]": {
+        "editor.tabSize": 2,
+    },
+    "[javascriptreact]": {
+        "editor.tabSize": 2,
+    },
+
+    // THIS IS TURNED OFF SO THE BLANK LINES IN THIS FILE DON'T GET EATEN EACH TIME IT'S SAVED
+    "[jsonc]": {
+        "editor.formatOnSave": false
+    },
+
+    // Whether to lint Python files using pylint.
+    "python.linting.pylintEnabled": false,
+
+    // Whether to lint Python files using flake8
+    "python.linting.flake8Enabled": true,
+
+    // Arguments passed in. Each argument is a separate item in the array.
+    //   "python.linting.flake8Args": ["--ignore=E265,E302,E303,E702"],
+    //E265 is "block comment should start with ‘# ‘"
+    //E302 is "expected 2 blank lines, found ___"
+    //E303 is "too many blank lines (___)"
+    //E702 is "multiple statements on one line (semicolon)"
+
+
+
+
+    /*********** FOR EXTENSIONS *************/
+
+    //SO THAT SUBTLEBRACKETS CAN DO ITS THING
+    "editor.matchBrackets": false,
+    "subtleBrackets.bracketPairs": [
+        "{}",
+        "[]",
+        "()",
+        "<>"
+    ],
+
+
+
+    /*********** FROM SENTRY ************/
+
+    // Configure glob patterns for excluding files and folders. For example, the files explorer decides which files and folders to show or hide based on this setting.
+    "files.exclude": {
+        "**/*.pyc": true,
+        "**/*.min.js": true,
+        "**/*.js.map": true,
+        "/static/": true,
+        "node_modules": true,
+        "htmlcov": true,
+        "build": true,
+        "*.log": true,
+        "*.egg-info": true,
+        "src/sentry/locale": true,
+        "src/sentry/static/sentry/dist/": true
+    },
+
+    // Controls whether to follow symlinks while searching.
+    "search.followSymlinks": false,
+
+    // "eslint.options": {
+    //     "configFile": "~/.eslintrc.json"
+    // },
+
+    // "files.associations": {
+    //     "*.jsx": "javascriptreact",
+    //     "*.js": "javascriptreact"
+    // },
+
+
+
+
+    // Provider for formatting. Possible options include 'autopep8', 'black', and 'yapf'.
+    "python.formatting.provider": "autopep8",
+
+    // Arguments passed in. Each argument is a separate item in the array.
+    "python.formatting.autopep8Args": [
+        "--global-config",
+        "${workspaceRoot}/setup.cfg"
+    ],
+
+    //I THINK THIS ISN'T AN ISSUE ANYMORE. IF FORMAT ON SAVE BREAKS FOR PYTHON, TURN THIS BACK ON AND PUT IN THE APPROPRIATE PATH
+    // https://github.com/DonJayamanne/pythonVSCode/issues/992
+    // "python.pythonPath": "${env.WORKON_HOME}/sentry/bin/python",
+
+    // test discovery is sluggish and the UI around running
+    // tests is often in your way and misclicked
+    "python.unitTest.pyTestEnabled": false,
+    "python.unitTest.unittestEnabled": false,
+    "python.unitTest.nosetestsEnabled": false,
+
+    //IT'S UNCLEAR IF THIS IS NECESSARY
+    // "prettier-eslint.prettierPath": "${env.WORKON_HOME}/node_modules/prettier/bin/prettier.js",
+
+
+}
