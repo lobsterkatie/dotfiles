@@ -64,15 +64,20 @@ function set_prompt() {
     #get the current branch, if any
     #$(command) runs the command and gives back the result
     local branch=$(get_git_branch)
+    #add a newline if we're in a branch
+    if [[ $branch != "" ]]
+    then
+        branch="$branch\n"
+    fi
 
     #if we're in an env, add the name of the env to the prompt
     #[[ boolean expression ]] gives the truth value of the expression
     #fi closes the if block (since it's 'if' spelled backwards)
-    #basename takes a full path and spit out just the final bit
+    #basename takes a full path and spits out just the final bit
     #(everything after the last /)
     if [[ $VIRTUAL_ENV != "" ]]
     then
-        local env="($(basename $VIRTUAL_ENV)) "
+        local env="($(basename $VIRTUAL_ENV)) \n"
     else
         local env=""
     fi
@@ -86,7 +91,7 @@ function set_prompt() {
     #http://misc.flogisoft.com/bash/tip_colors_and_formatting#colors1
     #in order to get multiple lines not to run on top of each other, add \[
     #and \] around the color codes
-    export PS1="\n\[\e[38;5;29m\]${env}\[\e[38;5;69m\]${branch}\[\e[38;5;256m\]${prompt_emoji}  \W > "
+    export PS1="\n\[\e[38;5;29m\]${env}\[\e[38;5;69m\]${branch}\[\e[38;5;99m\]${prompt_emoji} \W > \[\e[38;5;256m\]"
 
     #alternative two-line version
     # export PS1="\n\e[38;5;69m${branch}\n\e[38;5;29m${env}\e[38;5;256m${prompt_emoji}  \W > "
