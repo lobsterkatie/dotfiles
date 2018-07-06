@@ -32,6 +32,9 @@
     // When enabled, will trim trailing whitespace when saving a file.
     "files.trimTrailingWhitespace": true,
 
+    // Controls whether to use ripgrep in text and file search
+    "search.useRipgrep": false,
+
     // Whether to confirm on exit if there are active terminal sessions.
     "terminal.integrated.confirmOnExit": true,
 
@@ -81,6 +84,11 @@
     "javascript.showUnused": false,
     "typescript.showUnused": false,
 
+    // TURNED OFF BECAUSE IT BREAKS LINKS IN DJANGO TEMPLATES https://github.com/Microsoft/vscode/issues/44342
+    "[html]": {
+        "editor.formatOnSave": false,
+    },
+
     "[javascript]": {
         "editor.tabSize": 2,
     },
@@ -88,9 +96,16 @@
         "editor.tabSize": 2,
     },
 
-    // THIS IS TURNED OFF SO THE BLANK LINES IN THIS FILE DON'T GET EATEN EACH TIME IT'S SAVED
     "[jsonc]": {
-        "editor.formatOnSave": false
+        // THIS IS TURNED OFF SO THE BLANK LINES IN THIS FILE DON'T GET EATEN EACH TIME IT'S SAVED
+        "editor.formatOnSave": false,
+
+        // Controls how lines should wrap. Can be:
+        //  - 'off' (disable wrapping),
+        //  - 'on' (viewport wrapping),
+        //  - 'wordWrapColumn' (wrap at `editor.wordWrapColumn`) or
+        //  - 'bounded' (wrap at minimum of viewport and `editor.wordWrapColumn`).
+        "editor.wordWrap": "on",
     },
 
     // Whether to lint Python files using pylint.
