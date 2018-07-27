@@ -1,6 +1,6 @@
 {
     // Controls if the editor should automatically format the pasted content. A formatter must be available and the formatter should be able to format a range in a document.
-    "editor.formatOnPaste": true,
+    "editor.formatOnPaste": false,
 
     // Format a file on save. A formatter must be available, the file must not be auto-saved, and editor must not be shutting down.
     "editor.formatOnSave": true,
@@ -19,6 +19,9 @@
 
     // The number of spaces a tab is equal to. This setting is overridden based on the file contents when `editor.detectIndentation` is on.
     "editor.tabSize": 4,
+
+    // Number of editors shown in the Open Editors pane.
+    "explorer.openEditors.visible":0,
 
     // Controls whether unsaved files are remembered between sessions, allowing the save prompt when exiting the editor to be skipped.
     "files.hotExit": "off",
@@ -58,7 +61,7 @@
     "window.restoreWindows": "all",
 
     // Adjust the zoom level of the window. The original size is 0 and each increment above (e.g. 1) or below (e.g. -1) represents zooming 20% larger or smaller. You can also enter decimals to adjust the zoom level with a finer granularity.
-    "window.zoomLevel": 0.5,
+    "window.zoomLevel": 1,
 
     // Specifies the color theme used in the workbench.
     "workbench.colorTheme": "Atom One Dark",
@@ -145,6 +148,7 @@
         "**/*.min.js": true,
         "**/*.js.map": true,
         "/static/": true,
+        "coverage":true,
         "node_modules": true,
         "htmlcov": true,
         "build": true,
@@ -187,6 +191,8 @@
     "python.unitTest.pyTestEnabled": false,
     "python.unitTest.unittestEnabled": false,
     "python.unitTest.nosetestsEnabled": false,
+    "editor.minimap.enabled": false,
+    "workbench.startupEditor": "newUntitledFile",
 
     //IT'S UNCLEAR IF THIS IS NECESSARY
     // "prettier-eslint.prettierPath": "${env.WORKON_HOME}/node_modules/prettier/bin/prettier.js",
