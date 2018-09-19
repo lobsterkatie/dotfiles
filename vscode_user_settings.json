@@ -8,6 +8,12 @@
     // The modifier to be used to add multiple cursors with the mouse. `ctrlCmd` maps to `Control` on Windows and Linux and to `Command` on macOS. The Go To Definition and Open Link mouse gestures will adapt such that they do not conflict with the multicursor modifier.
     "editor.multiCursorModifier": "ctrlCmd",
 
+    // Controls whether the editor should highlight semantic symbol occurrences
+    "editor.occurrencesHighlight": false,
+
+    // Enables pop-up that shows parameter documentation and type information as you type
+    "editor.parameterHints": false,
+
     // Controls how the editor should render the current line highlight, possibilities are 'none', 'gutter', 'line', and 'all'.
     "editor.renderLineHighlight": "gutter",
 
@@ -64,7 +70,7 @@
     "window.zoomLevel": 1,
 
     // Specifies the color theme used in the workbench.
-    "workbench.colorTheme": "Atom One Dark",
+    "workbench.colorTheme": "Material Night Eighties",
 
     // Controls the sizing of editor tabs. Set to 'fit' to keep tabs always large enough to show the full editor label. Set to 'shrink' to allow tabs to get smaller when the available space is not enough to show all tabs at once.
     "workbench.editor.tabSizing": "shrink",
@@ -138,6 +144,30 @@
         "<>"
     ],
 
+    // Define paired characters and their shared color group
+  "bracketPairColorizer.consecutivePairColors": [
+    "()",
+    "[]",
+    "{}",
+    // [
+    //   "Salmon",
+    //   "YellowGreen",
+    //   "DarkTurquoise",
+    //   "Orchid",
+    //   "SlateBlue"
+    // ],
+    [
+      "SlateGrey"
+    ],
+    "Red"
+  ],
+
+  // Show active bracket scope in gutter?
+  "bracketPairColorizer.showBracketsInGutter": true,
+
+  // Show a horizontal line to create a block around the active bracket scope?
+  "bracketPairColorizer.showHorizontalScopeLine": false,
+
 
 
     /*********** FROM SENTRY ************/
@@ -193,6 +223,8 @@
     "python.unitTest.nosetestsEnabled": false,
     "editor.minimap.enabled": false,
     "workbench.startupEditor": "newUntitledFile",
+    "breadcrumbs.enabled": true,
+    "html.format.wrapAttributes": "aligned-multiple",
 
     //IT'S UNCLEAR IF THIS IS NECESSARY
     // "prettier-eslint.prettierPath": "${env.WORKON_HOME}/node_modules/prettier/bin/prettier.js",
