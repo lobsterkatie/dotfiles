@@ -4,6 +4,6 @@
 [credential]
 	helper = osxkeychain
 [core]
-	editor = 'subl' --wait
+	editor = 'code' --wait
 [push]
 	default = current
