@@ -119,9 +119,6 @@ export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 # activate a virtualenv
 # alias ae='source env/bin/activate'
 
-# git stuff
-alias gs='git status'
-
 # cd to particular locations
 alias sentry1='cd /Users/Katie/Documents/Sentry'
 alias brain='cd /Users/Katie/Documents/Sentry/brain'
@@ -129,8 +126,42 @@ alias sentry2='cd /Users/Katie/Documents/Sentry/sentry'
 alias gsentry='cd /Users/Katie/Documents/Sentry/getsentry'
 alias testapps='cd /Users/Katie/Documents/Sentry/test-apps'
 
+#fix the damned audio
+alias fixaudio='sudo killall coreaudiod'
 
 
+
+############### git stuff ###############
+
+alias gs='git status'
+
+# THIS IS NOT YET WORKING - DOESN'T ACTUALLY PICK UP ALL THE STUFF IT SHOULD
+
+# function delete_old_branches() {
+#     git checkout master
+
+#     #git fetch -p removes all references to remote-tracking branches which no
+#     #longer exist on the remote
+
+#     #git branch -vv will list which branches have been deleted on the remote
+
+#     #awk is a test processing utility
+#     #the first part of an awk command is a regex, the second part is what to do
+#     #with any line which matches that regex
+#     #so here, here we're finding branches marked as 'gone'
+#     #$1 is the first "field" (whitespace separated, so the name of the branch in this case)
+
+#     #xargs takes what it's given and makes them the arguments to the command
+
+#     #git branch -d deletes a branch
+
+#     git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D
+
+# }
+
+
+######## FROM CRAMER ##########
+export PYTHONDONTWRITEBYTECODE=1
 
 
 
@@ -223,3 +254,5 @@ source /usr/local/bin/virtualenvwrapper.sh
 # make nvm work
 export NVM_DIR="/Users/Katie/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
