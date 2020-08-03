@@ -12,7 +12,7 @@
     "editor.occurrencesHighlight": false,
 
     // Enables pop-up that shows parameter documentation and type information as you type
-    "editor.parameterHints": false,
+    "editor.parameterHints.enabled": true,
 
     // Controls how the editor should render the current line highlight, possibilities are 'none', 'gutter', 'line', and 'all'.
     "editor.renderLineHighlight": "gutter",
@@ -42,10 +42,7 @@
     "files.trimTrailingWhitespace": true,
 
     // Controls whether to use ripgrep in text and file search
-    "search.useRipgrep": false,
-
-    // Whether to confirm on exit if there are active terminal sessions.
-    "terminal.integrated.confirmOnExit": true,
+    // "search.useRipgrep": false,
 
     // Controls the style of terminal cursor.
     "terminal.integrated.cursorStyle": "line",
@@ -67,7 +64,7 @@
     "window.restoreWindows": "all",
 
     // Adjust the zoom level of the window. The original size is 0 and each increment above (e.g. 1) or below (e.g. -1) represents zooming 20% larger or smaller. You can also enter decimals to adjust the zoom level with a finer granularity.
-    "window.zoomLevel": 1,
+    "window.zoomLevel": -1,
 
     // Specifies the color theme used in the workbench.
     "workbench.colorTheme": "Material Night Eighties",
@@ -82,27 +79,36 @@
 
     /************ LANGUAGE-SPECIFIC STUFF ************/
 
+    "files.associations": {
+        "*.har": "jsonc",
+        "*.html": "html",
+        "*.js": "javascriptreact",
+        "*.json": "jsonc",
+        "*.jsx": "javascriptreact",
+        "*.njk": "njk"
+    },
+
     // Do not use duplicate style definitions
     "css.lint.duplicateProperties": "warning",
 
     // No unit for zero needed
     "css.lint.zeroUnits": "warning",
 
-    // Enable/disable highlighting of unused variables in code. Requires TypeScript >= 2.9
-    // IF THIS IS ENABLED, SYNTAX HIGHLIGHTING BREAKS FOR THAT LINE
-    "javascript.showUnused": false,
-    "typescript.showUnused": false,
 
     // TURNED OFF BECAUSE IT BREAKS LINKS IN DJANGO TEMPLATES https://github.com/Microsoft/vscode/issues/44342
     "[html]": {
         "editor.formatOnSave": false,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
 
     "[javascript]": {
         "editor.tabSize": 2,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+
     },
     "[javascriptreact]": {
         "editor.tabSize": 2,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
 
     "[jsonc]": {
@@ -115,7 +121,10 @@
         //  - 'wordWrapColumn' (wrap at `editor.wordWrapColumn`) or
         //  - 'bounded' (wrap at minimum of viewport and `editor.wordWrapColumn`).
         "editor.wordWrap": "on",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
+
+    "javascript.preferences.importModuleSpecifier": "relative",
 
     // Whether to lint Python files using pylint.
     "python.linting.pylintEnabled": false,
@@ -130,8 +139,11 @@
     //E303 is "too many blank lines (___)"
     //E702 is "multiple statements on one line (semicolon)"
 
+    // Path to Black, you can use a custom version of Black by modifying this setting to include the full path.
+    "python.formatting.blackPath": "/Users/Katie/.cache/pre-commit/repoFLfnG3",
 
-
+    "typescript.autoClosingTags": false,
+    "typescript.preferences.importModuleSpecifier": "relative",
 
     /*********** FOR EXTENSIONS *************/
 
@@ -174,60 +186,115 @@
 
     // Configure glob patterns for excluding files and folders. For example, the files explorer decides which files and folders to show or hide based on this setting.
     "files.exclude": {
-        "**/*.pyc": true,
-        "**/*.min.js": true,
-        "**/*.js.map": true,
-        "/static/": true,
-        "coverage":true,
-        "node_modules": true,
-        "htmlcov": true,
-        "build": true,
-        "*.log": true,
         "*.egg-info": true,
-        "src/sentry/locale": true,
-        "src/sentry/static/sentry/dist/": true
+        "*.log": true,
+        // "**/*.js.map": true,
+        "**/*.min.js": false,
+        "**/*.pyc": true,
+        "**/*.pysnap": true,
+        "build": true,
+        "coverage": true,
+        "htmlcov": true,
+        // "node_modules": true
     },
 
-    // Controls whether to follow symlinks while searching.
-    "search.followSymlinks": false,
 
     // "eslint.options": {
     //     "configFile": "~/.eslintrc.json"
     // },
 
-    // "files.associations": {
-    //     "*.jsx": "javascriptreact",
-    //     "*.js": "javascriptreact"
-    // },
-
-
-
-
     // Provider for formatting. Possible options include 'autopep8', 'black', and 'yapf'.
-    "python.formatting.provider": "autopep8",
+    "python.formatting.provider": "black",
 
     // Arguments passed in. Each argument is a separate item in the array.
     "python.formatting.autopep8Args": [
         "--global-config",
-        "${workspaceRoot}/setup.cfg"
+        "${workspaceRoot}/setup.cfg",
+        "--ignore",
+        "E402,E702"
     ],
-
-    //I THINK THIS ISN'T AN ISSUE ANYMORE. IF FORMAT ON SAVE BREAKS FOR PYTHON, TURN THIS BACK ON AND PUT IN THE APPROPRIATE PATH
-    // https://github.com/DonJayamanne/pythonVSCode/issues/992
-    // "python.pythonPath": "${env.WORKON_HOME}/sentry/bin/python",
+    // E402 is "module level import not at top of file"
+    // E702 is "multiple statements on one line (semicolon)"
 
     // test discovery is sluggish and the UI around running
     // tests is often in your way and misclicked
-    "python.unitTest.pyTestEnabled": false,
-    "python.unitTest.unittestEnabled": false,
-    "python.unitTest.nosetestsEnabled": false,
-    "editor.minimap.enabled": false,
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "editor.minimap.enabled": true,
     "workbench.startupEditor": "newUntitledFile",
     "breadcrumbs.enabled": true,
     "html.format.wrapAttributes": "aligned-multiple",
+    "git.autofetch": true,
+    "python.pythonPath": "/usr/local/bin/python",
+    "terminal.integrated.rendererType": "dom",
+
 
     //IT'S UNCLEAR IF THIS IS NECESSARY
     // "prettier-eslint.prettierPath": "${env.WORKON_HOME}/node_modules/prettier/bin/prettier.js",
+
+    "editor.tokenColorCustomizations": {
+        "[Material Night Eighties]": {
+            "textMateRules": [{
+                "name": "Comments",
+                "scope": "comment, punctuation.definition.comment, comment.line.double-slash punctuation.definition.comment",
+                "settings": {
+                    "foreground": "#9ea7af"
+                }
+            }]
+        }
+    },
+    "files.autoSave": "onWindowChange",
+    "workbench.editor.restoreViewState": false,
+    "workbench.editor.revealIfOpen": true,
+    "editor.largeFileOptimizations": false,
+    "workbench.settings.useSplitJSON": true,
+    "emmet.includeLanguages": {
+        "njk": "html"
+    },
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "git.confirmSync": false,
+    "window.title": "${folderName}",
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "rewrap.autoWrap.enabled": true,
+    },
+    "workbench.settings.editor": "json",
+    "java.configuration.checkProjectSettingsExclusions": false,
+    "python.jediEnabled": false,
+    // "editor.hover.enabled": true,
+    "editor.selectionHighlight": false,
+    "workbench.colorCustomizations": {
+        // "terminal.foreground": "#FFFF"
+        // "editor.lineHighlightBackground": "#00000030",
+		"editor.selectionBackground": "#E1E1E140",
+    },
+    "problems.showCurrentInStatus": true,
+    "search.searchOnType": false,
+    "terminal.integrated.minimumContrastRatio": 4.5,
+    "editor.minimap.size": "fill",
+    "outline.showEnumMembers": false,
+    "outline.showProperties": false,
+    "outline.showVariables": false,
+    "merge-conflict.autoNavigateNextConflict.enabled": true,
+    "autoimport.showNotifications": true,
+    "rewrap.autoWrap.enabled": false,
+
+    "bracketPairColorizer.scopeLineCSS": [
+        "borderStyle : solid",
+        "borderWidth : 2px",
+        "borderColor : {color}; opacity: 1"
+    ],
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "cSpell.userWords": [
+        "kmclb"
+    ],
+    "cSpell.enableFiletypes": [
+        "!typescript"
+    ],
 
 
 }

@@ -1,9 +1,37 @@
 [user]
-	name = Katie Byers
-	email = lobsterkatie@gmail.com
+name = Katie Byers
+email = lobsterkatie@gmail.com
 [credential]
-	helper = osxkeychain
+helper = osxkeychain
+# [branch]
+# 	autoSetupMerge = always
 [core]
-	editor = 'code' --wait
+editor = 'code' --wait
+excludesfile = /Users/Katie/.gitignore_global
+ignorecase = true
+[alias]
+unstage = restore --staged
+stashall = !git add . && git stash
+popall = !git stash pop --quiet && git unstage . && git status
+# rebase = rebase -i
 [push]
-	default = current
+default = current
+[status]
+showUntrackedFiles = all
+[format]
+pretty = oneline
+# [pull]
+# default = current #not actually a thing
+[filter "lfs"]
+clean = git-lfs clean -- %f
+smudge = git-lfs smudge -- %f
+process = git-lfs filter-process
+required = true
+[difftool "sourcetree"]
+cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+path =
+[mergetool "sourcetree"]
+cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+trustExitCode = true
+[commit]
+template = /Users/Katie/.stCommitMsg

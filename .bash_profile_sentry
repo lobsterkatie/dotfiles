@@ -4,7 +4,16 @@
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
+function rename_tab() {
+    printf '\e]1;%s\a' "$1"
+}
 
+function rename_window() {
+    printf '\e]2;%s\a' "$1"
+}
+
+# note that `git rev-parse --abbrev-ref HEAD` will also get you the current
+# branch name
 function get_git_branch() {
     #git branch outputs on stderr (stream #2) so redirect that to /dev/null to
     #supress the output:
@@ -31,7 +40,15 @@ function get_git_branch() {
     #replace that with an open bracket, the contents of that group (the branch
     #name) and a close bracket
 
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/[\1] /'
+    # local current_branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1 /')
+    # # $current_branch
+    # # export SENTRY_BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/[\1] /')
+    # export SENTRY_BRANCH=$current_branch
+    # echo "xxxx"
+    # echo $SENTRY_BRANCH
+    # # echo "yyy"
+    # # echo $current_branch
+    git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/[\1] /'
 }
 
 #name=(thing thing thing) is how you create an array
@@ -40,7 +57,6 @@ emoji=(🐶 🐥 🦄 🦋 🐚 🐷 🦊 🐼 🐭 🦎 🦑 🐠 🐬 🦈 �
 #declare this as a global variable since functions in bash can't return
 #anything other than the return value of the last statement
 prompt_emoji=
-
 
 function pick_random_emoji() {
     #get the length of the emoji array
@@ -59,14 +75,12 @@ function pick_random_emoji() {
     prompt_emoji=${emoji[$rand_index]}
 }
 
-
 function set_prompt() {
     #get the current branch, if any
     #$(command) runs the command and gives back the result
     local branch=$(get_git_branch)
     #add a newline if we're in a branch
-    if [[ $branch != "" ]]
-    then
+    if [[ $branch != "" ]]; then
         branch="$branch\n"
     fi
 
@@ -75,8 +89,7 @@ function set_prompt() {
     #fi closes the if block (since it's 'if' spelled backwards)
     #basename takes a full path and spits out just the final bit
     #(everything after the last /)
-    if [[ $VIRTUAL_ENV != "" ]]
-    then
+    if [[ $VIRTUAL_ENV != "" ]]; then
         local env="($(basename $VIRTUAL_ENV)) \n"
     else
         local env=""
@@ -91,18 +104,35 @@ function set_prompt() {
     #http://misc.flogisoft.com/bash/tip_colors_and_formatting#colors1
     #in order to get multiple lines not to run on top of each other, add \[
     #and \] around the color codes
-    export PS1="\n\[\e[38;5;29m\]${env}\[\e[38;5;69m\]${branch}\[\e[38;5;99m\]${prompt_emoji} \W > \[\e[38;5;256m\]"
+    # export PS1="\n\[\e[38;5;29m\]${env}\[\e[38;5;69m\]${branch}\[\e[38;5;99m\]${prompt_emoji} \W > \[\e[38;5;256m\]"
+
+    # tput is "terminal put" (does terminal commands in a way that adapts to the
+    # terminal which is running)
+    # setaf sets the text color
+    # TEAL=$(tput setaf 29)
+    # BLUE=$(tput setaf 69)
+    # PURPLE=$(tput setaf 99)
+    # WHITE=$(tput setaf 256)
+
+    # with the \[ and \], backspace deletes the prompt, too
+    # without them, the second line of typing runs over the prompt
+    # export PS1="\n\[${TEAL}${env}\]\[${BLUE}${branch}\]\[${PURPLE}${prompt_emoji} \W > \]\[${WHITE}\]"
+
+    TEAL="\[\e[38;5;29m\]"
+    BLUE="\[\e[38;5;69m\]"
+    PURPLE="\[\e[38;5;99m\]"
+    WHITE="\[\e[38;5;256m\]"
+
+    export PS1="\n${TEAL}${env}${BLUE}${branch}${PURPLE}${prompt_emoji} \W > ${WHITE}"
 
     #alternative two-line version
     # export PS1="\n\e[38;5;69m${branch}\n\e[38;5;29m${env}\e[38;5;256m${prompt_emoji}  \W > "
 
 }
 
-
 #PROMPT_COMMAND is an environment variable which specifies a command to be run
 #before each prompt is displayed
 export PROMPT_COMMAND=set_prompt
-
 
 ############### stuff about the path ###############
 
@@ -112,28 +142,189 @@ export PATH=/Applications/Postgres.app/Contents/Versions/9.4/bin/:$PATH
 # MacPorts Installer addition on 2016-10-17_at_16:38:03: adding an appropriate PATH variable for use with MacPorts.
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 
+# for ruby
+export PATH="/usr/local/lib/ruby/gems/2.6.0/bin:/usr/local/opt/ruby/bin:$PATH"
+export PKG_CONFIG_PATH="/usr/local/opt/ruby/lib/pkgconfig"
 
+# for yarn
+export PATH="~/.config/yarn/global:$PATH"
+
+# for RN android development
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
+# export PATH=$PATH:$ANDROID_HOME/emulator
+# export PATH=$PATH:$ANDROID_HOME/tools
+# export PATH=$PATH:$ANDROID_HOME/tools/bin
+# export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 ############### aliases and other shortcuts ###############
 
 # activate a virtualenv
-# alias ae='source env/bin/activate'
+alias ae='source env/bin/activate'
 
 # cd to particular locations
 alias sentry1='cd /Users/Katie/Documents/Sentry'
-alias brain='cd /Users/Katie/Documents/Sentry/brain'
 alias sentry2='cd /Users/Katie/Documents/Sentry/sentry'
 alias gsentry='cd /Users/Katie/Documents/Sentry/getsentry'
 alias testapps='cd /Users/Katie/Documents/Sentry/test-apps'
+alias docs='cd /Users/Katie/Documents/Sentry/sentry-docs'
+# alias vsc='cd /Users/Katie/Documents/Sentry/sentry.vsc'
+
+#open stuff in VSCode
+
+alias ccrelay='code /Users/Katie/Documents/Sentry/relay'
+alias cccli='code /Users/Katie/Documents/Sentry/sentry-cli'
+alias ccjava='code /Users/Katie/Documents/Sentry/sentry-java'
+alias ccpython='code /Users/Katie/Documents/Sentry/sentry-python'
+alias cccocoa='code /Users/Katie/Documents/Sentry/sentry-cocoa'
+alias ccdocs='code /Users/Katie/Documents/Sentry/sentry-docs'
+alias ccjs='code /Users/Katie/Documents/Sentry/sentry-javascript'
+alias ccrn='code /Users/Katie/Documents/Sentry/sentry-react-native'
+alias cccraft='code /Users/Katie/Documents/Sentry/craft'
+
+# go to particular repos
+
+alias gorelay='cd /Users/Katie/Documents/Sentry/relay'
+alias gocli='cd /Users/Katie/Documents/Sentry/sentry-cli'
+alias gojava='cd /Users/Katie/Documents/Sentry/sentry-java'
+alias gopython='cd /Users/Katie/Documents/Sentry/sentry-python'
+alias gococoa='cd /Users/Katie/Documents/Sentry/sentry-cocoa'
+alias godocs='cd /Users/Katie/Documents/Sentry/sentry-docs'
+alias gojs='cd /Users/Katie/Documents/Sentry/sentry-javascript'
+alias gorn='cd /Users/Katie/Documents/Sentry/sentry-react-native'
+alias gocraft='cd /Users/Katie/Documents/Sentry/craft'
+
+# inspired by Kamil
+# run tests on @sentry/browser
+alias checkbrowser="gojs && cd packages/browser && yarn run-s test:unit test:integration"
+# build, lint, and run tests on entire sentry-js repo
+alias checkjs="gojs && rm -rf node_modules/ packages/*/node_modules && yarn install && yarn clean && yarn build && yarn lint && yarn test"
+# use local, linked copies of sentry-js packages rather than downloaded ones
+alias linkjs="yarn link @sentry/browser @sentry/node @sentry/apm @sentry/core @sentry/minimal @sentry/hub @sentry/types @sentry/utils @sentry/typescript @sentry/integrations"
+
+# from rodolfo
+# list all dependencies in the current project which are linked/local versions
+yarn-linked="find -L $(find node_modules -type l) -type d -prune"
+# show all packages which have been made available for linking using `yarn link`
+yarn-links="(cd $HOME/.config/yarn/link && find . -type l | cut -c 3-)"
+
+#craft stuff
+alias devcraft="node ./node_modules/\@sentry/craft/dist/index.js"
 
 #fix the damned audio
 alias fixaudio='sudo killall coreaudiod'
 
+#serve the current directory (run as serveon <portnum>)
+alias serveon='python -m SimpleHTTPServer'
 
+#run the fix-dev-env script
+alias fixdevenv='cd /Users/Katie/Documents/Sentry && . fix_dev_env.sh'
+
+#always show hidden files
+alias ls='ls -a'
+
+#show the last n items from the history (run as hist <num entries>)
+alias hist="history | tail -n"
+
+#make py.test always show print statements
+alias py.test="py.test -r P"
+
+# alias gcscraft="gs://craft-test-artifacts/"
 
 ############### git stuff ###############
 
+# let hub extend git
+# eval "$(hub alias -s)"
+alias git='hub'
+
 alias gs='git status'
+
+alias gl='echo && git log --abbrev-commit $(git merge-base master $(git rev-parse --abbrev-ref HEAD))^..HEAD'
+
+alias gc='git commit -m'
+
+function stash_current_branchname() {
+
+    local branch_name=$(git rev-parse --abbrev-ref HEAD)
+    export STASHED_BRANCH=$branch_name
+
+    echo "Stashed '$branch_name' as STASHED_BRANCH"
+}
+
+function checkout_stashed_branch() {
+    git checkout $STASHED_BRANCH
+}
+
+# $1 is the branch name (HOW TO HANDLE FLAGS??)
+# function checkoutPlus() {
+
+# }
+
+alias gsb=stash_current_branchname
+alias gcb=checkout_stashed_branch
+
+function get_pr_url() {
+    #git remote -v gives you the fetch and push remotes in the form
+    #<remote name>	https://github.com/<gh-org-name>/<gh-repo-name>.git (fetch | push)
+
+    #the url is the same for both, so just take the first one:
+    #(head -n <x> gives you the first <x> lines of output)
+    #git ... | head -n 1
+
+    #head outputs on stdout (stream #1) so redirect that to /dev/null to
+    #supress the output:
+    # <...> head -n 1 1> /dev/null
+
+    #now pipe that suppressed output to sed, which processes the text:
+    # <...> | sed
+
+    #in sed, -e lets us write multiple commands
+
+    #'/<regex>/d' deletes all lines which are picked up by the regex
+    #in our case, we want to delete lines which start
+    # ^
+    #with any character that's not *
+    # [^*]
+    #because branches we're not on don't start with a *
+
+    #next we want to grab the branch name from the line containing it, which
+    #really just means stripping the * and space off the front
+    #s=substitute
+    #format is s/old-text-regex/new-text-regex
+    #so, find a *, followed by a space, and then group .*, which is any number
+    #of random characters
+    #replace that with an open bracket, the contents of that group (the branch
+    #name) and a close bracket
+    # git remote -v | head -n 1 | sed "s/$(git remote | head -n 1).\(.*\)\.git.*/\1\/pull\/new\/$(get_git_branch)/"
+
+    local branch_name=$(git rev-parse --abbrev-ref HEAD)
+    #get names of remotes - should be "origin"
+    local remote_name=$(git remote | head -n 1)
+    #url should be of the form https://github.com/<gh-org-name>/<gh-repo-name>.git
+    #use sed to remove the .git (double backslash to make the backslash a backslash)
+    local repo_url_base=$(git remote get-url ${remote_name} | head -n 1 | sed -E s/\\.git//)
+    #
+    echo "${repo_url_base}/pull/new/${branch_name}"
+}
+
+function pr() {
+    open $(get_pr_url)
+}
+
+function stash() {
+    git add .
+    git commit -nm STASH
+}
+
+function popstash() {
+    git reset HEAD^
+}
+
+function rebase() {
+    git rebase -i $(git merge-base master HEAD)
+}
+
+# alias pr="open $(get_pr_url)" #FIGURE OUT HOW TO MAKE THIS NOT RUN AUTOMATICALLY
 
 # THIS IS NOT YET WORKING - DOESN'T ACTUALLY PICK UP ALL THE STUFF IT SHOULD
 
@@ -159,13 +350,11 @@ alias gs='git status'
 
 # }
 
-
 ######## FROM CRAMER ##########
 export PYTHONDONTWRITEBYTECODE=1
 
-
-
-
+######## RANDOM ##########
+source .secrets.sh
 
 ## BELOW FROM HB ##
 
@@ -225,14 +414,11 @@ export PYTHONDONTWRITEBYTECODE=1
 #     fi
 # }
 
-
 ############### random other stuff ###############
-
 
 # add the public keys for makeuploading
 # ssh-add ~/.ssh/fellowship_hackbrightacademy_com_rsa
 # ssh-add ~/.ssh/byers-fellowship
-
 
 # # enable git completion, if the script is there
 # #the -f means "if this file exists and is a regular file"
@@ -242,17 +428,28 @@ export PYTHONDONTWRITEBYTECODE=1
 #   source ~/.git-completion.bash
 # fi
 
-
 # make the history remember lots of stuff
 export HISTSIZE=10000
 
-# make virtualenvwrapper work
-source /usr/local/bin/virtualenvwrapper.sh
-
-# make
+# make psql, createdb, dropdb, and friends work with the docker version of postgres
+export PGHOST="127.0.0.1"
 
 # make nvm work
 export NVM_DIR="/Users/Katie/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
 
+# make yarn work
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# make cargo (package manager for Rust) work
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# make pyenv work
+eval "$(pyenv init -)"
+
+# make volta (like nvm) work
+export VOLTA_HOME="/Users/Katie/.volta"
+grep --silent "$VOLTA_HOME/bin" <<<$PATH || export PATH="$VOLTA_HOME/bin:$PATH"
+
+# make direnv work
+eval "$(direnv hook bash)"
